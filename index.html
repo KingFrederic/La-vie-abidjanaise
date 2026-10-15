@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f1e7" />
+    <meta
+      name="description"
+      content="Une journée à Abidjan : choisis tes trajets, tes rencontres et ton rythme dans une simulation narrative locale."
+    />
+    <title>La vie abidjanaise — Un jour à la fois</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23154340'/%3E%3Cpath d='M17 56c11-10 20 10 32 0s21 10 34 0M17 71c11-10 20 10 32 0s21 10 34 0' fill='none' stroke='%23f4bd62' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="game.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="La vie abidjanaise, accueil">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 44 44" fill="none">
+              <path d="M5 18c5-4 9 4 14 0s9 4 14 0 7 2 8 2" />
+              <path d="M5 26c5-4 9 4 14 0s9 4 14 0 7 2 8 2" />
+              <path d="M5 34c5-4 9 4 14 0s9 4 14 0 7 2 8 2" />
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <strong>LA VIE ABIDJANAISE</strong>
+            <small>UNE JOURNÉE À LA FOIS</small>
+          </span>
+        </a>
+
+        <div class="topbar-center">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>Simulation narrative locale</span>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="save-state" id="save-state">
+            <span class="save-icon" aria-hidden="true">✓</span>
+            <span id="save-label">Sauvegarde locale</span>
+          </span>
+          <button class="button button-quiet" id="glossary-button" type="button">
+            <span class="button-symbol" aria-hidden="true">Aa</span>
+            Lexique
+          </button>
+          <button class="button button-reset" id="reset-button" type="button" title="Recommencer la journée">
+            <span aria-hidden="true">↻</span>
+            <span class="reset-label">Nouvelle journée</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <section class="hero" aria-labelledby="hero-title">
+          <img
+            class="hero-photo"
+            src="public/images/abidjan-lagoon-evening.webp"
+            alt="La lagune Ébrié au coucher du soleil, entre le Plateau et Treichville."
+          />
+          <div class="hero-shade" aria-hidden="true"></div>
+          <div class="hero-content">
+            <p class="hero-kicker"><span>ABJ</span><i></i> CARNET DE ROUTE Nº 01</p>
+            <h1 id="hero-title">Le tempo<br /><em>de la lagune.</em></h1>
+            <p class="hero-intro">
+              Une maquette à livrer, des quartiers à traverser, des liens à faire vivre.
+              À Abidjan, chaque détour raconte quelque chose.
+            </p>
+            <div class="hero-tags" aria-label="Lieux de cette journée">
+              <span>Yopougon</span><b>→</b><span>Le Plateau</span><b>→</b><span>Treichville</span>
+            </div>
+          </div>
+          <div class="hero-stamp" aria-hidden="true">
+            <span>06</span>
+            <small>REPÈRES<br />SUR LA CARTE</small>
+          </div>
+          <div class="hero-caption">
+            <span class="caption-line"></span>
+            <span>Abidjan, Côte d’Ivoire</span>
+          </div>
+        </section>
+
+        <section class="day-overview" aria-label="État de ta journée">
+          <div class="overview-heading">
+            <div>
+              <p class="section-kicker">TON QUOTIDIEN, TES CHOIX</p>
+              <h2>La journée en cours</h2>
+            </div>
+            <div class="clock-weather">
+              <div class="clock-block">
+                <span class="micro-label">HEURE LOCALE</span>
+                <strong id="current-time">07:20</strong>
+              </div>
+              <span class="clock-divider" aria-hidden="true"></span>
+              <div class="weather-block">
+                <span class="micro-label">MÉTÉO DE JEU</span>
+                <strong><span id="weather-icon" aria-hidden="true">☀</span><span id="weather-label">Ciel clair</span></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric-card metric-money">
+              <div class="metric-topline">
+                <span class="metric-icon" aria-hidden="true">₣</span>
+                <span class="metric-label">Budget du jour</span>
+                <span class="metric-status" id="money-status">À gérer</span>
+              </div>
+              <strong class="metric-value"><span id="money-value">6 500</span><small>FCFA</small></strong>
+              <span class="metric-caption">La monnaie suit tes détours.</span>
+            </article>
+            <article class="metric-card metric-energy">
+              <div class="metric-topline">
+                <span class="metric-icon" aria-hidden="true">↗</span>
+                <span class="metric-label">Énergie</span>
+                <span class="metric-status" id="energy-status">En forme</span>
+              </div>
+              <strong class="metric-value"><span id="energy-value">7</span><small>/ 10</small></strong>
+              <div class="meter" role="meter" aria-label="Énergie" aria-valuemin="0" aria-valuemax="10" aria-valuenow="7">
+                <span class="meter-fill" id="energy-meter"></span>
+              </div>
+            </article>
+            <article class="metric-card metric-network">
+              <div class="metric-topline">
+                <span class="metric-icon" aria-hidden="true">⌁</span>
+                <span class="metric-label">Réseau</span>
+                <span class="metric-status">Le quartier</span>
+              </div>
+              <strong class="metric-value"><span id="network-value">1</span><small>/ 5</small></strong>
+              <div class="dot-meter" id="network-meter" aria-label="Réseau, 1 sur 5"></div>
+            </article>
+            <article class="metric-card metric-trust">
+              <div class="metric-topline">
+                <span class="metric-icon" aria-hidden="true">✳</span>
+                <span class="metric-label">Confiance</span>
+                <span class="metric-status">Ta réputation</span>
+              </div>
+              <strong class="metric-value"><span id="trust-value">0</span><small>/ 5</small></strong>
+              <div class="dot-meter trust-meter" id="trust-meter" aria-label="Confiance, 0 sur 5"></div>
+            </article>
+          </div>
+
+          <div class="day-progress">
+            <div class="progress-copy">
+              <span class="micro-label">LE FIL DE TA JOURNÉE</span>
+              <span id="progress-copy">Étape 1 sur 6 <b>·</b> Le matin</span>
+            </div>
+            <div class="progress-track" id="progress-track" aria-label="Progression de la journée"></div>
+          </div>
+        </section>
+
+        <div class="game-layout">
+          <section class="story-column" aria-label="Scène et décisions">
+            <article class="scene-card" id="scene-card" aria-label="Scène interactive" aria-live="polite">
+              <div id="scene-mount"></div>
+            </article>
+
+            <section class="journal-card" aria-labelledby="journal-title">
+              <div class="journal-heading">
+                <div>
+                  <p class="section-kicker">TES PAS DANS LA VILLE</p>
+                  <h2 id="journal-title">Carnet de route</h2>
+                </div>
+                <span class="journal-counter" id="journal-counter">01 NOTE</span>
+              </div>
+              <ol class="journal-list" id="journal-list"></ol>
+            </section>
+          </section>
+
+          <aside class="city-column" aria-label="Carte et objectif du jour">
+            <section class="map-card" aria-labelledby="map-title">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">CAP SUR LA VILLE</p>
+                  <h2 id="map-title">Ton itinéraire</h2>
+                </div>
+                <span class="map-compass" aria-hidden="true">N<span>↑</span></span>
+              </div>
+              <div class="map-wrap">
+                <svg class="city-map" viewBox="0 0 430 270" role="img" aria-labelledby="map-svg-title map-svg-desc">
+                  <title id="map-svg-title">Carte schématique d’Abidjan</title>
+                  <desc id="map-svg-desc">Yopougon, Adjamé, Abobo-Doumé, le Plateau, Cocody et Treichville reliés par des trajets stylisés autour de la lagune Ébrié.</desc>
+                  <path class="lagoon-shape" d="M76 188c45-31 75-30 118-21 37 8 57 30 98 16 31-11 59-34 92-24l18 34c-36 9-66 44-111 42-44-2-60-24-101-22-42 1-69 25-110 19-22-3-39-13-54-25z" />
+                  <text class="lagoon-label" x="236" y="216">LAGUNE ÉBRIÉ</text>
+                  <path class="map-road" d="M42 139C81 117 114 103 155 93S230 82 286 86" />
+                  <path class="map-road" d="M43 145C84 170 124 190 191 198S256 188 315 177" />
+                  <path class="map-road" d="M193 198C222 165 249 125 286 86" />
+                  <path class="map-road" d="M286 86C324 72 355 58 389 49" />
+                  <path class="map-road" d="M286 86C302 116 311 146 315 177" />
+                  <path class="map-bridge" d="M290 111C296 132 304 151 313 166" />
+                  <path class="chosen-route" id="chosen-route" d="M42 139" />
+
+                  <g class="map-stop is-current" data-stop="yopougon" transform="translate(42 139)">
+                    <circle class="stop-halo" r="14" />
+                    <circle class="stop-dot" r="5" />
+                    <text x="-3" y="29">Yopougon</text>
+                  </g>
+                  <g class="map-stop" data-stop="adjame" transform="translate(155 93)">
+                    <circle class="stop-halo" r="13" />
+                    <circle class="stop-dot" r="4" />
+                    <text x="-29" y="-15">Adjamé</text>
+                  </g>
+                  <g class="map-stop" data-stop="abobo-doume" transform="translate(193 198)">
+                    <circle class="stop-halo" r="13" />
+                    <circle class="stop-dot" r="4" />
+                    <text x="-35" y="26">Abobo-Doumé</text>
+                  </g>
+                  <g class="map-stop" data-stop="plateau" transform="translate(286 86)">
+                    <circle class="stop-halo" r="13" />
+                    <circle class="stop-dot" r="4" />
+                    <text x="-24" y="-16">Le Plateau</text>
+                  </g>
+                  <g class="map-stop" data-stop="cocody" transform="translate(389 49)">
+                    <circle class="stop-halo" r="13" />
+                    <circle class="stop-dot" r="4" />
+                    <text x="-24" y="-15">Cocody</text>
+                  </g>
+                  <g class="map-stop" data-stop="treichville" transform="translate(315 177)">
+                    <circle class="stop-halo" r="13" />
+                    <circle class="stop-dot" r="4" />
+                    <text x="-38" y="28">Treichville</text>
+                  </g>
+                </svg>
+              </div>
+              <div class="map-legend">
+                <span><i class="legend-dot legend-here"></i><span id="current-place-label">Tu es à Yopougon</span></span>
+                <span><i class="legend-line"></i>Ton trajet</span>
+              </div>
+              <p class="map-disclaimer">Carte de jeu simplifiée — elle ne remplace pas un plan de transport.</p>
+            </section>
+
+            <section class="mission-card" aria-labelledby="mission-title">
+              <div class="mission-topline">
+                <span class="mission-icon" aria-hidden="true">✉</span>
+                <span class="mission-label">LE FIL ROUGE</span>
+                <span class="mission-dot" aria-hidden="true"></span>
+              </div>
+              <h2 id="mission-title">La maquette de Naya</h2>
+              <p id="mission-copy">Remettre une épreuve imprimée au Plateau avant la pause de midi.</p>
+              <div class="mission-deadline">
+                <span>RENDEZ-VOUS</span>
+                <strong id="mission-deadline">12:00</strong>
+              </div>
+              <p class="mission-status" id="mission-status">Il reste du temps pour choisir ton chemin.</p>
+            </section>
+
+            <section class="local-note" aria-label="Note de conception">
+              <span class="local-note-icon" aria-hidden="true">✳</span>
+              <p><strong>Abidjan a plusieurs tempos.</strong> Le trafic, les traversées, les repas et les coups de main changent le cours de la journée.</p>
+            </section>
+          </aside>
+        </div>
+
+        <footer class="page-footer">
+          <span>FAIT AVEC LE RYTHME D’ABIDJAN <b>✳</b></span>
+          <span>Une fiction interactive · sans compte · sauvegarde sur cet appareil</span>
+        </footer>
+      </main>
+    </div>
+
+    <dialog class="glossary-dialog" id="glossary-dialog" aria-labelledby="glossary-title">
+      <div class="dialog-topline">
+        <div>
+          <p class="section-kicker">PETIT LEXIQUE DU QUOTIDIEN</p>
+          <h2 id="glossary-title">Les mots du trajet</h2>
+        </div>
+        <button class="dialog-close" id="close-glossary" type="button" aria-label="Fermer le lexique">×</button>
+      </div>
+      <dl class="glossary-list">
+        <div><dt>Gbaka</dt><dd>Minibus collectif, souvent une option populaire pour traverser la ville.</dd></div>
+        <div><dt>Wôrô-wôrô</dt><dd>Taxi collectif associé à des trajets et des zones de la ville.</dd></div>
+        <div><dt>Maquis</dt><dd>Restaurant de quartier où l’on mange, discute et prend le temps.</dd></div>
+        <div><dt>Garba</dt><dd>Attiéké servi avec du poisson et des accompagnements, apprécié dans toute la ville.</dd></div>
+        <div><dt>Bateau-bus</dt><dd>Transport sur la lagune, avec des embarcadères et des correspondances selon l’itinéraire.</dd></div>
+      </dl>
+      <p class="dialog-footnote">Les situations de ce jeu sont fictives; les mots et les lieux font partie d’un quotidien vivant et diversement vécu.</p>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
